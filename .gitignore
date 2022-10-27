@@ -34,3 +34,7 @@ minesweeper
 
 # CMake build directory
 build/
+
+# Notes
+notes.txt
+
