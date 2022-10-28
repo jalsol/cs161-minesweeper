@@ -51,7 +51,7 @@ void Table::fillTable() {
                 }
 
                 try {
-                    Cell& nearby_cell =
+                    const Cell& nearby_cell =
                         getCell(pos_x + offset_x, pos_y + offset_y);
 
                     if (nearby_cell.getValue() == Cell::sus_cell_value) {

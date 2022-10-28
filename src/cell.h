@@ -18,7 +18,7 @@ public:
     ~Cell();
 
     void setValue(int value);
-    int getValue();
+    int getValue() const;
 
 private:
     int m_value;
