@@ -1,4 +1,4 @@
-# CS161 Project: Minesweeper
+# CS161 Project: Minesusweeper
 
 Author: 22125113 - Nguyen Quang Truong
 
@@ -14,5 +14,5 @@ Author: 22125113 - Nguyen Quang Truong
 - Install [Raylib on your platform](https://github.com/raysan5/raylib#build-and-installation)
 - `cmake -S . -B ./build`
 - `make -C build`
-- The executable `minesweeper` will appear.
+- The executable `minesusweeper` will appear.
 

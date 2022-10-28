@@ -1,11 +1,8 @@
+#include "constants.h"
 #include "raylib.h"
 
 int main() {
-    constexpr int screen_width = 800;
-    constexpr int screen_height = 450;
-    constexpr int frames_per_second = 60;
-
-    InitWindow(screen_width, screen_height, "not sus at all window");
+    InitWindow(screen_width, screen_height, "Minesuswepper");
 
     SetTargetFPS(frames_per_second);
 
@@ -18,7 +15,7 @@ int main() {
 
         ClearBackground(RAYWHITE);
 
-        DrawText("so this is a window, huh", pos_x, pos_y, font_size, BLACK);
+        DrawText("sussy baka", pos_x, pos_y, font_size, BLACK);
 
         EndDrawing();
     }
