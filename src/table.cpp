@@ -1,10 +1,9 @@
-#include "table.h"
-
 #include <algorithm>
 #include <numeric>
 #include <random>
 #include <vector>
 
+#include "table.h"
 #include "global.h"
 #include "utils.h"
 
