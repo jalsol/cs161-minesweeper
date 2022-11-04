@@ -37,7 +37,7 @@ void Cell::drawCell() {
 
     switch (m_cell_state) {
         case CellState::Opened: {
-            if (m_value == -1) {
+            if (m_value == sus_cell_value) {
                 DrawTexture(sus_texture, m_screen_pos_x, m_screen_pos_y, WHITE);
             } else if (m_value > 0) {
                 DrawText(TextFormat("%d", m_value),
