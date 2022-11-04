@@ -62,8 +62,6 @@ bool Table::revealCell(int coord_x, int coord_y) {
     bool clicked_on_bomb = cell.reveal();
 
     if (clicked_on_bomb) {
-        std::cout << "liem 2 hon dai tao\n";
-
         for (const auto& [bomb_coord_x, bomb_coord_y] : m_bomb_cell_coords) {
             getCell(bomb_coord_x, bomb_coord_y).reveal();
         }

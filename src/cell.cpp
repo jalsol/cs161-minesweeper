@@ -19,9 +19,7 @@ void Cell::setCellScreenPos(int x, int y) {
     m_screen_pos_y = y;
 }
 
-CellState Cell::getCellState() const {
-    return m_cell_state;
-}
+CellState Cell::getCellState() const { return m_cell_state; }
 
 void Cell::drawCell() {
     static constexpr const char closed_image_path[] = "assets/vent.png";
@@ -45,7 +43,8 @@ void Cell::drawCell() {
     switch (m_cell_state) {
         case CellState::Opened: {
             if (m_value == bomb_cell_value) {
-                DrawTexture(bomb_texture, m_screen_pos_x, m_screen_pos_y, WHITE);
+                DrawTexture(bomb_texture, m_screen_pos_x, m_screen_pos_y,
+                            WHITE);
             } else if (m_value > 0) {
                 DrawText(TextFormat("%d", m_value),
                          m_screen_pos_x + cell_size / 2,
