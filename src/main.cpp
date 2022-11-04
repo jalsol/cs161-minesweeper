@@ -7,23 +7,15 @@
 static constexpr int screen_width = 1366;
 static constexpr int screen_height = 768;
 
-int main() {
-    static constexpr int frames_per_second = 20;
-
-    InitWindow(screen_width, screen_height,
-               "Mongusweeper - a sussy Minesweeper clone by jalsol");
-
-    SetTargetFPS(frames_per_second);
+void runGame() {
+    static const Image background_image = LoadImage("assets/background.png");
+    static const Texture2D background_texture =
+        LoadTextureFromImage(background_image);
+    static constexpr int font_size = 30;
 
     Table table(20, 10);
 
-    while (!WindowShouldClose()) {
-        static constexpr const char background_path[] = "assets/background.png";
-        static const Image background_image = LoadImage(background_path);
-        static const Texture2D background_texture =
-            LoadTextureFromImage(background_image);
-        static constexpr int font_size = 30;
-
+    while (true) {
         auto [coord_x, coord_y] =
             table.getCoordsFromPos(GetMouseX(), GetMouseY());
 
@@ -39,8 +31,6 @@ int main() {
         {
             DrawTexture(background_texture, 0, 0, WHITE);
 
-            DrawTextSus(TextFormat("SCORE: %i", 6969), 400, 30, font_size,
-                        WHITE);
             DrawTextSus(TextFormat("TIMER: %i", 696969), 600, 30, font_size,
                         WHITE);
             DrawTextSus(TextFormat("BOMBS: %i", 69696969), 800, 30, font_size,
@@ -50,7 +40,71 @@ int main() {
         }
         EndDrawing();
     }
+}
 
+int main() {
+    static constexpr int frames_per_second = 20;
+
+    InitWindow(screen_width, screen_height,
+               "Mongusweeper - a sussy Minesweeper clone by jalsol");
+
+    SetTargetFPS(frames_per_second);
+
+    while (!WindowShouldClose()) {
+        static const Image background_image = LoadImage("assets/menu_bg.png");
+        static const Texture2D background_texture =
+            LoadTextureFromImage(background_image);
+
+        static constexpr int play_corner_x = 95;
+        static constexpr int play_corner_y = 390;
+
+        static constexpr int settings_corner_x = 95;
+        static constexpr int settings_corner_y = 495;
+
+        static constexpr int button_width = 230;
+        static constexpr int button_height = 100;
+
+        auto [pos_x, pos_y] = GetMousePosition();
+
+        if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+            bool in_play_x = (play_corner_x <= pos_x &&
+                              pos_x < play_corner_x + button_width);
+            bool in_play_y = (play_corner_y <= pos_y &&
+                              pos_y < play_corner_y + button_height);
+            bool in_play = in_play_x && in_play_y;
+
+            bool in_settings_x = (settings_corner_x <= pos_x &&
+                                  pos_x < settings_corner_x + button_width);
+            bool in_settings_y = (settings_corner_y <= pos_y &&
+                                  pos_y < settings_corner_y + button_height);
+            bool in_settings = in_settings_x && in_settings_y;
+
+            if (in_play) {
+                std::cout << "Play!\n";
+            } else if (in_settings) {
+                std::cout << "Settings!\n";
+            }
+        }
+
+        BeginDrawing();
+        {
+            DrawTexture(background_texture, 0, 0, WHITE);
+            DrawTextSus("Mongusweeper", 100, 100, 100, WHITE);
+
+            DrawRectangle(play_corner_x, play_corner_y, button_width,
+                          button_height, ColorAlpha(WHITE, 0.25f));
+            DrawRectangleLines(play_corner_x, play_corner_y, button_width,
+                               button_height, GRAY);
+            DrawTextSus("Play", 100, 400, 100, RED);
+
+            DrawRectangle(settings_corner_x, settings_corner_y, button_width,
+                          button_height, ColorAlpha(WHITE, 0.25f));
+            DrawRectangleLines(settings_corner_x, settings_corner_y,
+                               button_width, button_height, GRAY);
+            DrawTextSus("Settings", 100, 500, 100, RED);
+        }
+        EndDrawing();
+    }
     CloseWindow();
 
     return 0;

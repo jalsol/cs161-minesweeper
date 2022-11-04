@@ -14,6 +14,8 @@
 #include "global.h"
 #include "utils.h"
 
+Table::Table() : m_width(0), m_height(0) {}
+
 Table::Table(int width, int height)
     : m_width(width), m_height(height), m_board(width * height) {
     fillTable();

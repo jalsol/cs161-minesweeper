@@ -11,6 +11,7 @@ public:
     static constexpr int corner_x = 83;
     static constexpr int corner_y = 80;
 
+    Table();
     Table(int width, int height);
     ~Table();
 

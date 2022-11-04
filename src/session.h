@@ -1,6 +1,8 @@
 #ifndef SESSION_H
 #define SESSION_H
 
+#include "table.h"
+
 struct Session {
 public:
     static Session& getSessionInstance();
