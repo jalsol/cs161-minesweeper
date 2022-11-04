@@ -11,7 +11,7 @@ int main() {
     static constexpr int frames_per_second = 20;
 
     InitWindow(screen_width, screen_height,
-               "Minesusweeper - a sussy Minesweeper clone by jalsol");
+               "Mongusweeper - a sussy Minesweeper clone by jalsol");
 
     SetTargetFPS(frames_per_second);
 
