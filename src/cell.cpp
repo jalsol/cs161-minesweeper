@@ -24,7 +24,7 @@ CellState Cell::getCellState() const { return m_cell_state; }
 void Cell::drawCell() {
     static constexpr const char closed_image_path[] = "assets/vent.png";
     static constexpr const char bomb_image_path[] = "assets/sus.png";
-    static constexpr const char flag_image_path[] = "assets/slug.png";
+    static constexpr const char flag_image_path[] = "assets/guess.png";
 
     static const Image closed_image = LoadImage(closed_image_path);
     static const Image bomb_image = LoadImage(bomb_image_path);
