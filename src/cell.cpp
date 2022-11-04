@@ -22,13 +22,9 @@ void Cell::setCellScreenPos(int x, int y) {
 CellState Cell::getCellState() const { return m_cell_state; }
 
 void Cell::drawCell() {
-    static constexpr const char closed_image_path[] = "assets/vent.png";
-    static constexpr const char bomb_image_path[] = "assets/sus.png";
-    static constexpr const char flag_image_path[] = "assets/guess.png";
-
-    static const Image closed_image = LoadImage(closed_image_path);
-    static const Image bomb_image = LoadImage(bomb_image_path);
-    static const Image flag_image = LoadImage(flag_image_path);
+    static const Image closed_image = LoadImage("assets/vent.png");
+    static const Image bomb_image = LoadImage("assets/sus.png");
+    static const Image flag_image = LoadImage("assets/guess.png");
 
     static const Texture2D closed_texture = LoadTextureFromImage(closed_image);
     static const Texture2D bomb_texture = LoadTextureFromImage(bomb_image);
