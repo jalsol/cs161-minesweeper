@@ -30,7 +30,7 @@
 *.exe
 *.out
 *.app
-minesweeper
+minesusweeper
 
 # CMake build directory
 build/
