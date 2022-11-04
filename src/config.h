@@ -4,7 +4,7 @@
 struct Config {
 public:
     static Config& getConfigInstance();
-    int number_of_sus;
+    int number_of_bomb;
     int table_width;
     int table_height;
 

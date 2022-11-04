@@ -24,12 +24,15 @@ int main() {
             LoadTextureFromImage(background_image);
         static constexpr int font_size = 30;
 
+        auto [coord_x, coord_y] =
+            table.getCoordsFromPos(GetMouseX(), GetMouseY());
+
         if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
-            auto [coord_x, coord_y] =
-                table.getCoordsFromPos(GetMouseX(), GetMouseY());
-            if (table.clickOnCell(coord_x, coord_y)) {
-                std::cout << "amongus'd\n";
+            if (table.revealCell(coord_x, coord_y)) {
+                // TODO: do something when game is lost
             }
+        } else if (IsMouseButtonPressed(MOUSE_RIGHT_BUTTON)) {
+            table.getCell(coord_x, coord_y).toggleFlag();
         }
 
         BeginDrawing();

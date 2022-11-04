@@ -6,11 +6,12 @@
 enum class CellState {
     Closed,
     Opened,
+    Flagged,
 };
 
 struct Cell {
 public:
-    static constexpr int sus_cell_value = -1;
+    static constexpr int bomb_cell_value = -1;
     static constexpr int cell_size = 60;
     static constexpr int font_size = 30;
 
@@ -22,7 +23,9 @@ public:
 
     void setCellScreenPos(int x, int y);
     void drawCell();
-    bool click();
+    bool reveal();
+    void toggleFlag();
+    CellState getCellState() const;
 
 private:
     int m_value;

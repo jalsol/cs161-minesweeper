@@ -20,10 +20,10 @@ public:
     void drawTable();
     std::pair<int, int> getCoordsFromPos(int pos_x, int pos_y);
     std::pair<int, int> getPosFromCoords(int coord_x, int coord_y);
-    bool clickOnCell(int coord_x, int coord_y);
+    bool revealCell(int coord_x, int coord_y);
     bool coordsInRange(int coord_x, int coord_y);
 
-    std::vector<std::pair<int, int>> m_sus_cell_coords;
+    std::vector<std::pair<int, int>> m_bomb_cell_coords;
 
 private:
     int m_width;

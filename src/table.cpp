@@ -49,19 +49,23 @@ std::pair<int, int> Table::getPosFromCoords(int coord_x, int coord_y) {
 }
 
 // returns false if got amongus'd
-bool Table::clickOnCell(int coord_x, int coord_y) {
+bool Table::revealCell(int coord_x, int coord_y) {
     if (!coordsInRange(coord_x, coord_y)) {
         return true;
     }
 
     Cell& cell = getCell(coord_x, coord_y);
-    bool clicked_on_sus = cell.click();
+    if (cell.getCellState() == CellState::Flagged) {
+        return true;
+    }
 
-    if (clicked_on_sus) {
+    bool clicked_on_bomb = cell.reveal();
+
+    if (clicked_on_bomb) {
         std::cout << "liem 2 hon dai tao\n";
 
-        for (const auto& [sus_coord_x, sus_coord_y] : m_sus_cell_coords) {
-            getCell(sus_coord_x, sus_coord_y).click();
+        for (const auto& [bomb_coord_x, bomb_coord_y] : m_bomb_cell_coords) {
+            getCell(bomb_coord_x, bomb_coord_y).reveal();
         }
 
         return false;
@@ -93,10 +97,10 @@ void Table::fillTable() {
     for (int i = 0; i < 20; ++i) {
         int coord_x = flattened_indices[i] % m_width;
         int coord_y = flattened_indices[i] / m_width;
-        m_sus_cell_coords.emplace_back(coord_x, coord_y);
+        m_bomb_cell_coords.emplace_back(coord_x, coord_y);
 
         Cell& cell = getCell(coord_x, coord_y);
-        cell.setValue(Cell::sus_cell_value);
+        cell.setValue(Cell::bomb_cell_value);
     }
 
     for (int i = 0; i < m_width * m_height; ++i) {
@@ -105,11 +109,11 @@ void Table::fillTable() {
 
         Cell& cell = getCell(coord_x, coord_y);
 
-        if (cell.getValue() == Cell::sus_cell_value) {
+        if (cell.getValue() == Cell::bomb_cell_value) {
             continue;
         }
 
-        int nearby_sus_count = 0;
+        int nearby_bomb_count = 0;
 
         for (int offset_x = -1; offset_x <= 1; ++offset_x) {
             for (int offset_y = -1; offset_y <= 1; ++offset_y) {
@@ -127,13 +131,13 @@ void Table::fillTable() {
 
                 const Cell& nearby_cell = getCell(nearby_x, nearby_y);
 
-                if (nearby_cell.getValue() == Cell::sus_cell_value) {
-                    ++nearby_sus_count;
+                if (nearby_cell.getValue() == Cell::bomb_cell_value) {
+                    ++nearby_bomb_count;
                 }
             }
         }
 
-        cell.setValue(nearby_sus_count);
+        cell.setValue(nearby_bomb_count);
     }
 }
 
@@ -179,11 +183,11 @@ void Table::clearNearbyCells(int src_coord_x, int src_coord_y) {
                 Cell& nearby_cell = getCell(nearby_x, nearby_y);
                 int nearby_cell_value = nearby_cell.getValue();
 
-                if (nearby_cell_value == Cell::sus_cell_value) {
+                if (nearby_cell_value == Cell::bomb_cell_value) {
                     continue;
                 }
 
-                nearby_cell.click();
+                nearby_cell.reveal();
 
                 if (nearby_cell_value == 0) {
                     queue.emplace(nearby_x, nearby_y);
