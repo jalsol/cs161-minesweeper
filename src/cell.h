@@ -29,8 +29,8 @@ public:
 
 private:
     int m_value;
-    int m_screen_pos_x;
-    int m_screen_pos_y;
+    double m_screen_pos_x;
+    double m_screen_pos_y;
     CellState m_cell_state;
 };
 

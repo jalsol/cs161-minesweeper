@@ -39,19 +39,19 @@ void Table::drawTable() {
     }
 }
 
-std::pair<int, int> Table::getCoordsFromPos(int pos_x, int pos_y) {
+std::pair<int, int> Table::getCoordsFromPos(double pos_x, double pos_y) {
     if (pos_x < corner_x || pos_y < corner_y) {
         return {-1, -1};
     }
 
-    int coord_x = (pos_x - corner_x) / Cell::cell_size;
-    int coord_y = (pos_y - corner_y) / Cell::cell_size;
+    int coord_x = (pos_x - center_x) / Cell::cell_size + m_width / 2.0;
+    int coord_y = (pos_y - center_y) / Cell::cell_size + m_height / 2.0;
     return {coord_x, coord_y};
 }
 
-std::pair<int, int> Table::getPosFromCoords(int coord_x, int coord_y) {
-    int pos_x = corner_x + coord_x * Cell::cell_size;
-    int pos_y = corner_y + coord_y * Cell::cell_size;
+std::pair<double, double> Table::getPosFromCoords(int coord_x, int coord_y) {
+    double pos_x = center_x + (coord_x - m_width / 2.0) * Cell::cell_size;
+    double pos_y = center_y + (coord_y - m_height / 2.0) * Cell::cell_size;
     return {pos_x, pos_y};
 }
 

@@ -14,6 +14,10 @@ int GameplayScreen::time_elapsed;
 int GameplayScreen::frame_counter;
 
 void GameplayScreen::interact() {
+    if (game_state != GameState::Playing) {
+        return;
+    }
+
     const auto& [coord_x, coord_y] =
         table.getCoordsFromPos(GetMouseX(), GetMouseY());
 

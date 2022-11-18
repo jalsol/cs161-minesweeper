@@ -10,6 +10,8 @@ struct Table {
 public:
     static constexpr int corner_x = 83;
     static constexpr int corner_y = 80;
+    static constexpr int center_x = 683;
+    static constexpr int center_y = 380;
 
     Table();
     Table(int width, int height);
@@ -19,8 +21,8 @@ public:
     int getWidth() const;
     int getHeight() const;
     void drawTable();
-    std::pair<int, int> getCoordsFromPos(int pos_x, int pos_y);
-    std::pair<int, int> getPosFromCoords(int coord_x, int coord_y);
+    std::pair<int, int> getCoordsFromPos(double pos_x, double pos_y);
+    std::pair<double, double> getPosFromCoords(int coord_x, int coord_y);
     int revealCell(int coord_x, int coord_y);
     bool coordsInRange(int coord_x, int coord_y);
 

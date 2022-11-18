@@ -43,8 +43,8 @@ void Cell::drawCell() {
                             WHITE);
             } else if (m_value > 0) {
                 DrawText(TextFormat("%d", m_value),
-                         m_screen_pos_x + cell_size / 2,
-                         m_screen_pos_y + cell_size / 2, font_size, BLACK);
+                         m_screen_pos_x + cell_size / 2.0,
+                         m_screen_pos_y + cell_size / 2.0, font_size, BLACK);
             }
         } break;
         case CellState::Closed: {
