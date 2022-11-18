@@ -58,6 +58,7 @@ void GameplayScreen::draw() {
     table.drawTable();
 
     if (game_state == GameState::Playing) {
+        updateFrameCount();
         return;
     }
 
@@ -97,8 +98,6 @@ void GameplayScreen::draw() {
     } else if (menu_selected) {
         global::screenToMenu();
     }
-
-    updateFrameCount();
 }
 
 void GameplayScreen::startNewGame() {

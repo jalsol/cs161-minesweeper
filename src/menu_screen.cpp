@@ -15,6 +15,7 @@ void MenuScreen::draw() {
 
     DrawTexture(background_texture, 0, 0, WHITE);
     DrawTextSus("Mongusweeper", 100, 100, 100, WHITE);
+    DrawTextSus("@jalsol", 100, 190, 30, WHITE);
 
     bool play_selected = GuiButton(Rectangle({95, 390, 230, 100}), "Play");
     bool settings_selected =
