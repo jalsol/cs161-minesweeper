@@ -12,6 +12,8 @@ Table GameplayScreen::table;
 GameState GameplayScreen::game_state;
 int GameplayScreen::time_elapsed;
 int GameplayScreen::frame_counter;
+double GameplayScreen::score;
+double GameplayScreen::high_score;
 
 void GameplayScreen::interact() {
     if (game_state != GameState::Playing) {
@@ -28,6 +30,7 @@ void GameplayScreen::interact() {
             game_state = GameState::Lost;
         } else if (reveal_value == 1) {
             game_state = GameState::Won;
+            saveHighScore();
         }
     } else if (IsMouseButtonPressed(MOUSE_RIGHT_BUTTON)) {
         table.getCell(coord_x, coord_y).toggleFlag();
@@ -53,14 +56,24 @@ void GameplayScreen::draw() {
 
     DrawTexture(background_texture, 0, 0, WHITE);
 
+    const Config& config = Config::getConfigInstance();
     const auto& [hours, minutes, seconds] = getCurrentTime();
+    score =
+        config.number_of_bomb
+        * table.getNumberOfRevealedCells()
+        / double(config.table_width * config.table_height - config.number_of_bomb);
 
     DrawTextSus(TextFormat("TIMER: %02d:%02d:%02d", hours, minutes, seconds),
-                600, 30, font_size, WHITE);
-    // DrawTextSus(TextFormat("BOMBS: %d", 6969), 800, 30, font_size, WHITE);
+                370, 30, font_size, WHITE);
+
+    DrawTextSus(TextFormat("SCORE: %.3f", score),
+                550, 30, font_size, WHITE);
+
+    DrawTextSus(TextFormat("HI-SCORE: %.3f", high_score),
+                700, 30, font_size, WHITE);
 
     bool save_game_selected
-        = GuiButton(Rectangle({1150, 30, 170, 100}), "Save game");
+        = GuiButton(Rectangle({1111, 10, 170, 60}), "Save game");
 
     table.drawTable();
 
@@ -117,6 +130,7 @@ void GameplayScreen::startNewGame() {
     game_state = GameState::Playing;
     time_elapsed = 0;
     frame_counter = 0;
+    score = 0;
 }
 
 void GameplayScreen::loadOldGame() {
@@ -136,6 +150,7 @@ void GameplayScreen::loadOldGame() {
     frame_counter = save_file["FrameSinceLastSecond"].as<int>();
     game_state = GameState::Playing;
 
+    score = save_file["Score"].as<double>();
     std::string saved_table = save_file["Table"].as<std::string>();
     std::string saved_state = save_file["State"].as<std::string>();
 
@@ -180,10 +195,35 @@ void GameplayScreen::saveOldGame() {
     node["NumberOfRevealedCells"] = table.getNumberOfRevealedCells();
     node["Table"] = saved_table;
     node["State"] = saved_state;
+    node["Score"] = score;
 
     std::ofstream save_file("save.yaml");
     save_file << config.config << '\n' << node;
     save_file.close();
+}
+
+void GameplayScreen::saveHighScore() {
+    if (score > high_score) {
+        high_score = score;
+
+        std::ofstream saved_high_score("high_score.txt");
+        saved_high_score << high_score;
+        saved_high_score.close();
+    }
+}
+
+void GameplayScreen::loadHighScore() {
+    std::ifstream saved_high_score("high_score.txt");
+
+    if (saved_high_score) {
+        double high_score;
+        saved_high_score >> high_score;
+        saved_high_score.close();
+    } else {
+        saveHighScore();
+    }
+
+    saved_high_score.close();
 }
 
 std::array<int, 3> GameplayScreen::getCurrentTime() {

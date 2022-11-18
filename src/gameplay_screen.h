@@ -19,12 +19,16 @@ public:
     static void startNewGame();
     static void loadOldGame();
     static void saveOldGame();
+    static void saveHighScore();
+    static void loadHighScore();
 
 private:
     static Table table;
     static GameState game_state;
     static int time_elapsed;
     static int frame_counter;
+    static double score;
+    static double high_score;
 
     static void updateFrameCount();
     static std::array<int, 3> getCurrentTime();

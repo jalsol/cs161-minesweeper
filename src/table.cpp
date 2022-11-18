@@ -67,6 +67,9 @@ int Table::revealCell(int coord_x, int coord_y) {
     if (cell.getCellState() == CellState::Flagged) {
         return 0;
     }
+    if (cell.getCellState() == CellState::Opened) {
+        return 0;
+    }
 
     bool clicked_on_bomb = cell.reveal();
     ++m_cells_revealed;

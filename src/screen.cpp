@@ -9,11 +9,13 @@ void screenToMenu() { screen_type = ScreenType::Menu; }
 
 void screenToGameplay() {
     screen_type = ScreenType::Gameplay;
+    GameplayScreen::loadHighScore();
     GameplayScreen::startNewGame();
 }
 
 void screenToContinue() {
     screen_type = ScreenType::Gameplay;
+    GameplayScreen::loadHighScore();
     GameplayScreen::loadOldGame();
 }
 
