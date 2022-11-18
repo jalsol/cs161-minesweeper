@@ -15,6 +15,7 @@ public:
 
     void readConfig();
     void writeConfig();
+
 private:
     Config();
     ~Config();

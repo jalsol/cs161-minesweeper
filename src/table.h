@@ -1,9 +1,9 @@
 #ifndef TABLE_H
 #define TABLE_H
 
+#include <string>
 #include <utility>
 #include <vector>
-#include <string>
 
 #include "cell.h"
 

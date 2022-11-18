@@ -220,8 +220,8 @@ void Table::clearNearbyCells(int src_coord_x, int src_coord_y) {
     }
 }
 
-
-void Table::loadFromSaveData(const std::string& table, const std::string& state) {
+void Table::loadFromSaveData(const std::string& table,
+                             const std::string& state) {
     for (int i = 0; i < m_width * m_height; ++i) {
         int coord_x = i % m_width;
         int coord_y = i / m_width;
@@ -249,6 +249,4 @@ void Table::loadFromSaveData(const std::string& table, const std::string& state)
     }
 }
 
-int Table::getNumberOfRevealedCells() {
-    return m_cells_revealed;
-}
+int Table::getNumberOfRevealedCells() { return m_cells_revealed; }

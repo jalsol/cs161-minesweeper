@@ -3,6 +3,7 @@
 #include <fstream>
 
 #include "config.h"
+#include "globals.h"
 #include "raygui.h"
 #include "raylib.h"
 #include "screen.h"
@@ -42,7 +43,7 @@ void GameplayScreen::updateFrameCount() {
         ++frame_counter;
     }
 
-    if (frame_counter == 20) {
+    if (frame_counter == global::frames_per_second) {
         frame_counter = 0;
         ++time_elapsed;
     }
@@ -58,22 +59,20 @@ void GameplayScreen::draw() {
 
     const Config& config = Config::getConfigInstance();
     const auto& [hours, minutes, seconds] = getCurrentTime();
-    score =
-        config.number_of_bomb
-        * table.getNumberOfRevealedCells()
-        / double(config.table_width * config.table_height - config.number_of_bomb);
+    score = config.number_of_bomb * table.getNumberOfRevealedCells() /
+            double(config.table_width * config.table_height -
+                   config.number_of_bomb);
 
     DrawTextSus(TextFormat("TIMER: %02d:%02d:%02d", hours, minutes, seconds),
                 370, 30, font_size, WHITE);
 
-    DrawTextSus(TextFormat("SCORE: %.3f", score),
-                550, 30, font_size, WHITE);
+    DrawTextSus(TextFormat("SCORE: %.3f", score), 550, 30, font_size, WHITE);
 
-    DrawTextSus(TextFormat("HI-SCORE: %.3f", high_score),
-                700, 30, font_size, WHITE);
+    DrawTextSus(TextFormat("HI-SCORE: %.3f", high_score), 700, 30, font_size,
+                WHITE);
 
-    bool save_game_selected
-        = GuiButton(Rectangle({1111, 10, 170, 60}), "Save game");
+    bool save_game_selected =
+        GuiButton(Rectangle({1111, 10, 170, 60}), "Save game");
 
     table.drawTable();
 
@@ -107,12 +106,11 @@ void GameplayScreen::draw() {
             break;
     }
 
-    bool new_game_selected
-        = GuiButton(Rectangle({400, 570, 150, 100}), "New game");
+    bool new_game_selected =
+        GuiButton(Rectangle({400, 570, 150, 100}), "New game");
     bool settings_selected =
         GuiButton(Rectangle({570, 570, 230, 100}), "Settings");
-    bool menu_selected =
-        GuiButton(Rectangle({820, 570, 130, 100}), "Menu");
+    bool menu_selected = GuiButton(Rectangle({820, 570, 130, 100}), "Menu");
 
     if (new_game_selected) {
         global::screenToGameplay();
