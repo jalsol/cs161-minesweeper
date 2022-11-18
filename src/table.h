@@ -21,7 +21,7 @@ public:
     void drawTable();
     std::pair<int, int> getCoordsFromPos(int pos_x, int pos_y);
     std::pair<int, int> getPosFromCoords(int coord_x, int coord_y);
-    bool revealCell(int coord_x, int coord_y);
+    int revealCell(int coord_x, int coord_y);
     bool coordsInRange(int coord_x, int coord_y);
 
     std::vector<std::pair<int, int>> m_bomb_cell_coords;
@@ -30,10 +30,11 @@ private:
     int m_width;
     int m_height;
     std::vector<Cell> m_board;
+    int m_cells_revealed;
 
     void fillTable();
     void initCellsScreenPos();
-    void clearNearbyCells(int coord_x, int coord_y);
+    int clearNearbyCells(int coord_x, int coord_y);
 };
 
 #endif  // TABLE_H

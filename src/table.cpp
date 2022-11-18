@@ -1,5 +1,3 @@
-#include "table.h"
-
 #include <algorithm>
 #include <iostream>
 #include <numeric>
@@ -11,13 +9,16 @@
 
 #include "cell.h"
 #include "config.h"
-#include "global.h"
 #include "utils.h"
 
-Table::Table() : m_width(0), m_height(0) {}
+#include "table.h"
+
+static constexpr int bomb_num = 0;
+
+Table::Table() : m_width(0), m_height(0), m_cells_revealed(0) {}
 
 Table::Table(int width, int height)
-    : m_width(width), m_height(height), m_board(width * height) {
+    : m_width(width), m_height(height), m_board(width * height), m_cells_revealed(0) {
     fillTable();
     initCellsScreenPos();
 }
@@ -39,6 +40,10 @@ void Table::drawTable() {
 }
 
 std::pair<int, int> Table::getCoordsFromPos(int pos_x, int pos_y) {
+    if (pos_x < corner_x || pos_y < corner_y) {
+        return {-1, -1};
+    }
+
     int coord_x = (pos_x - corner_x) / Cell::cell_size;
     int coord_y = (pos_y - corner_y) / Cell::cell_size;
     return {coord_x, coord_y};
@@ -50,15 +55,17 @@ std::pair<int, int> Table::getPosFromCoords(int coord_x, int coord_y) {
     return {pos_x, pos_y};
 }
 
-// returns false if got amongus'd
-bool Table::revealCell(int coord_x, int coord_y) {
+// returns -1 if clicked on bomb
+// returns 1 if all non-bomb cells are cleared
+// returns 0 otherwise
+int Table::revealCell(int coord_x, int coord_y) {
     if (!coordsInRange(coord_x, coord_y)) {
-        return true;
+        return 0;
     }
 
     Cell& cell = getCell(coord_x, coord_y);
     if (cell.getCellState() == CellState::Flagged) {
-        return true;
+        return 0;
     }
 
     bool clicked_on_bomb = cell.reveal();
@@ -67,15 +74,18 @@ bool Table::revealCell(int coord_x, int coord_y) {
         for (const auto& [bomb_coord_x, bomb_coord_y] : m_bomb_cell_coords) {
             getCell(bomb_coord_x, bomb_coord_y).reveal();
         }
-
-        return false;
+        return -1;
     }
 
     if (cell.getValue() == 0) {
-        clearNearbyCells(coord_x, coord_y);
+        m_cells_revealed += clearNearbyCells(coord_x, coord_y);
     }
 
-    return true;
+    if (m_cells_revealed == m_width * m_height - bomb_num) {
+        return 1;
+    }
+
+    return 0;
 }
 
 bool Table::coordsInRange(int coord_x, int coord_y) {
@@ -87,14 +97,17 @@ void Table::fillTable() {
     std::vector<int> flattened_indices(m_width * m_height);
     std::iota(flattened_indices.begin(), flattened_indices.end(), 0);
 
+    static std::random_device rd;
+    static std::mt19937 random_engine{rd()};
+
     for (int _ = 0; _ < 5; ++_) {
         std::shuffle(flattened_indices.begin(), flattened_indices.end(),
-                     global::random_engine);
+                     random_engine);
     }
 
     // const Config& config = Config::getConfigInstance();
 
-    for (int i = 0; i < 20; ++i) {
+    for (int i = 0; i < bomb_num; ++i) {
         int coord_x = flattened_indices[i] % m_width;
         int coord_y = flattened_indices[i] / m_width;
         m_bomb_cell_coords.emplace_back(coord_x, coord_y);
@@ -146,22 +159,23 @@ void Table::initCellsScreenPos() {
         for (int coord_x = 0; coord_x < m_width; ++coord_x) {
             Cell& cell = getCell(coord_x, coord_y);
 
-            auto [pos_x, pos_y] = getPosFromCoords(coord_x, coord_y);
+            const auto& [pos_x, pos_y] = getPosFromCoords(coord_x, coord_y);
             cell.setCellScreenPos(pos_x, pos_y);
         }
     }
 }
 
-void Table::clearNearbyCells(int src_coord_x, int src_coord_y) {
+int Table::clearNearbyCells(int src_coord_x, int src_coord_y) {
     std::queue<std::pair<int, int>> queue;
     std::set<std::pair<int, int>> visited;
 
     queue.emplace(src_coord_x, src_coord_y);
+    visited.emplace(src_coord_x, src_coord_y);
+    int cells_revealed = 1;
 
     while (!queue.empty()) {
         auto [coord_x, coord_y] = queue.front();
         queue.pop();
-        visited.emplace(coord_x, coord_y);
 
         for (int offset_x = -1; offset_x <= 1; ++offset_x) {
             for (int offset_y = -1; offset_y <= 1; ++offset_y) {
@@ -188,11 +202,15 @@ void Table::clearNearbyCells(int src_coord_x, int src_coord_y) {
                 }
 
                 nearby_cell.reveal();
+                ++cells_revealed;
 
                 if (nearby_cell_value == 0) {
                     queue.emplace(nearby_x, nearby_y);
+                    visited.emplace(nearby_x, nearby_y);
                 }
             }
         }
     }
+
+    return cells_revealed;
 }
