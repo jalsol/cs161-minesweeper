@@ -15,15 +15,30 @@ int main() {
 
     SetTargetFPS(global::frames_per_second);
 
-    InitAudioDevice();
-    Music menu_theme = LoadMusicStream("assets/theme.mp3");
-    PlayMusicStream(menu_theme);
+    // Load music
+    static Music menu_theme;
+    {
+        InitAudioDevice();
+        menu_theme = LoadMusicStream("assets/theme.mp3");
+        PlayMusicStream(menu_theme);
+    }
 
-    static Font font =
-        LoadFontEx("assets/Inyourfacejoffrey.ttf", 90, nullptr, 0);
-    GuiSetFont(font);
-    GuiSetStyle(DEFAULT, TEXT_SIZE, 50);
-    GuiSetStyle(SPINNER, SPIN_BUTTON_WIDTH, 60);
+    // load icon
+    {
+        static Image icon = LoadImage("assets/logo.png");
+        ImageFormat(&icon, PIXELFORMAT_UNCOMPRESSED_R8G8B8A8);
+        SetWindowIcon(icon);
+        UnloadImage(icon);
+    }
+
+    // load font and set style for buttons
+    {
+        static Font font =
+            LoadFontEx("assets/Inyourfacejoffrey.ttf", 90, nullptr, 0);
+        GuiSetFont(font);
+        GuiSetStyle(DEFAULT, TEXT_SIZE, 50);
+        GuiSetStyle(SPINNER, SPIN_BUTTON_WIDTH, 60);
+    }
 
     while (!WindowShouldClose()) {
         UpdateMusicStream(menu_theme);
