@@ -1,9 +1,10 @@
-#include <iostream>
-
+#include "raylib.h"
+#define RAYGUI_IMPLEMENTATION
 #include "gameplay_screen.h"
 #include "menu_screen.h"
-#include "raylib.h"
+#include "raygui.h"
 #include "screen.h"
+#include "settings_screen.h"
 #include "table.h"
 #include "utils.h"
 
@@ -18,7 +19,11 @@ int main() {
 
     SetTargetFPS(frames_per_second);
 
-    GameplayScreen::startNewGame();
+    static Font font =
+        LoadFontEx("assets/Inyourfacejoffrey.ttf", 90, nullptr, 0);
+    GuiSetFont(font);
+    GuiSetStyle(DEFAULT, TEXT_SIZE, 50);
+    GuiSetStyle(SPINNER, SPIN_BUTTON_WIDTH, 60);
 
     while (!WindowShouldClose()) {
         switch (global::getScreenType()) {
@@ -29,7 +34,7 @@ int main() {
                 GameplayScreen::interact();
             } break;
             case ScreenType::Settings: {
-                // SettingsScreen::interact();
+                SettingsScreen::interact();
             } break;
             default:
                 break;
@@ -45,7 +50,7 @@ int main() {
                     GameplayScreen::draw();
                 } break;
                 case ScreenType::Settings: {
-                    // SettingsScreen::draw();
+                    SettingsScreen::draw();
                 } break;
                 default:
                     break;

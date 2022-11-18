@@ -1,8 +1,6 @@
 #ifndef MENU_SCREEN_H
 #define MENU_SCREEN_H
 
-#include "button.h"
-
 struct MenuScreen {
     static constexpr int play_corner_x = 95;
     static constexpr int play_corner_y = 390;
@@ -17,8 +15,6 @@ struct MenuScreen {
     static void draw();
 
 private:
-    static Button play_button;
-    static Button settings_button;
 };
 
 #endif  // MENU_SCREEN_H

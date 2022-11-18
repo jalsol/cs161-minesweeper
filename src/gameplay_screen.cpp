@@ -1,42 +1,21 @@
+#include "gameplay_screen.h"
+
 #include <iostream>
 
-#include "button.h"
+#include "config.h"
+#include "raygui.h"
 #include "raylib.h"
 #include "screen.h"
 #include "utils.h"
-
-#include "gameplay_screen.h"
 
 Table GameplayScreen::table;
 GameState GameplayScreen::game_state;
 int GameplayScreen::time_elapsed;
 int GameplayScreen::frame_counter;
-Button GameplayScreen::play_button(500, 570, 130, 100, "Play");
-Button GameplayScreen::settings_button(650, 570, 230, 100, "Settings");
-
-void GameplayScreen::interactGameEnd() {
-    auto [mouse_x, mouse_y] = GetMousePosition();
-
-    if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
-        if (play_button.isClicked(mouse_x, mouse_y)) {
-            global::screenToGameplay();
-            startNewGame();
-        }
-    }
-}
 
 void GameplayScreen::interact() {
-    switch (game_state) {
-        case GameState::Lost:
-        case GameState::Won: {
-            interactGameEnd();
-            return;
-        } break;
-        default:
-            break;
-    }
-
-    const auto& [coord_x, coord_y] = table.getCoordsFromPos(GetMouseX(), GetMouseY());
+    const auto& [coord_x, coord_y] =
+        table.getCoordsFromPos(GetMouseX(), GetMouseY());
 
     if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
         int reveal_value = table.revealCell(coord_x, coord_y);
@@ -78,10 +57,11 @@ void GameplayScreen::draw() {
 
     table.drawTable();
 
+    if (game_state == GameState::Playing) {
+        return;
+    }
+
     switch (game_state) {
-        case GameState::Paused: {
-            DrawRectangle(0, 0, 1366, 768, WHITE);
-        } break;
         case GameState::Won: {
             static const Image won_image = LoadImage("assets/amogus_drip.png");
             static const Texture2D won_texture =
@@ -89,9 +69,6 @@ void GameplayScreen::draw() {
 
             DrawRectangle(0, 0, 1366, 768, ColorAlpha(WHITE, 0.5));
             DrawTexture(won_texture, 343, 20, WHITE);
-
-            GameplayScreen::play_button.draw();
-            GameplayScreen::settings_button.draw();
         } break;
         case GameState::Lost: {
             static const Image lost_image = LoadImage("assets/amogus.png");
@@ -100,19 +77,34 @@ void GameplayScreen::draw() {
 
             DrawRectangle(0, 0, 1366, 768, ColorAlpha(WHITE, 0.5));
             DrawTexture(lost_texture, 330, 0, WHITE);
-
-            GameplayScreen::play_button.draw();
-            GameplayScreen::settings_button.draw();
         } break;
         default:
             break;
+    }
+
+    float a = 420;
+
+    bool play_selected = GuiButton(Rectangle({a, 570, 130, 100}), "Play");
+    bool settings_selected =
+        GuiButton(Rectangle({a + 150, 570, 230, 100}), "Settings");
+    bool menu_selected =
+        GuiButton(Rectangle({a + 150 + 230 + 20, 570, 130, 100}), "Menu");
+
+    if (play_selected) {
+        global::screenToGameplay();
+    } else if (settings_selected) {
+        global::screenToSettings();
+    } else if (menu_selected) {
+        global::screenToMenu();
     }
 
     updateFrameCount();
 }
 
 void GameplayScreen::startNewGame() {
-    table = Table(20, 10);
+    const Config& config = Config::getConfigInstance();
+
+    table = Table(config.getTableWidth(), config.getTableHeight());
     game_state = GameState::Playing;
     time_elapsed = 0;
     frame_counter = 0;

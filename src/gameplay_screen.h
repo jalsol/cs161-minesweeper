@@ -3,7 +3,6 @@
 
 #include <array>
 
-#include "button.h"
 #include "table.h"
 
 enum class GameState {
@@ -24,13 +23,9 @@ private:
     static GameState game_state;
     static int time_elapsed;
     static int frame_counter;
-    static Button play_button;
-    static Button settings_button;
 
     static void updateFrameCount();
     static std::array<int, 3> getCurrentTime();
-
-    static void interactGameEnd();
 };
 
 #endif  // GAMEPLAY_SCREEN_H

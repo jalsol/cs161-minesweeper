@@ -38,3 +38,5 @@ build/
 # Notes
 notes.txt
 
+# game config
+config.yaml

@@ -1,11 +1,16 @@
 #include "screen.h"
 
+#include "gameplay_screen.h"
+
 namespace global {
 static ScreenType screen_type = ScreenType::Menu;
 
 void screenToMenu() { screen_type = ScreenType::Menu; }
 
-void screenToGameplay() { screen_type = ScreenType::Gameplay; }
+void screenToGameplay() {
+    screen_type = ScreenType::Gameplay;
+    GameplayScreen::startNewGame();
+}
 
 void screenToSettings() { screen_type = ScreenType::Settings; }
 

@@ -1,5 +1,6 @@
+#include "table.h"
+
 #include <algorithm>
-#include <iostream>
 #include <numeric>
 #include <queue>
 #include <random>
@@ -11,14 +12,13 @@
 #include "config.h"
 #include "utils.h"
 
-#include "table.h"
-
-static constexpr int bomb_num = 0;
-
 Table::Table() : m_width(0), m_height(0), m_cells_revealed(0) {}
 
 Table::Table(int width, int height)
-    : m_width(width), m_height(height), m_board(width * height), m_cells_revealed(0) {
+    : m_width(width),
+      m_height(height),
+      m_board(width * height),
+      m_cells_revealed(0) {
     fillTable();
     initCellsScreenPos();
 }
@@ -69,6 +69,7 @@ int Table::revealCell(int coord_x, int coord_y) {
     }
 
     bool clicked_on_bomb = cell.reveal();
+    ++m_cells_revealed;
 
     if (clicked_on_bomb) {
         for (const auto& [bomb_coord_x, bomb_coord_y] : m_bomb_cell_coords) {
@@ -78,10 +79,12 @@ int Table::revealCell(int coord_x, int coord_y) {
     }
 
     if (cell.getValue() == 0) {
-        m_cells_revealed += clearNearbyCells(coord_x, coord_y);
+        clearNearbyCells(coord_x, coord_y);
     }
 
-    if (m_cells_revealed == m_width * m_height - bomb_num) {
+    const Config& config = Config::getConfigInstance();
+
+    if (m_cells_revealed == m_width * m_height - config.getNumberOfBombs()) {
         return 1;
     }
 
@@ -105,9 +108,9 @@ void Table::fillTable() {
                      random_engine);
     }
 
-    // const Config& config = Config::getConfigInstance();
+    const Config& config = Config::getConfigInstance();
 
-    for (int i = 0; i < bomb_num; ++i) {
+    for (int i = 0; i < config.getNumberOfBombs(); ++i) {
         int coord_x = flattened_indices[i] % m_width;
         int coord_y = flattened_indices[i] / m_width;
         m_bomb_cell_coords.emplace_back(coord_x, coord_y);
@@ -165,13 +168,12 @@ void Table::initCellsScreenPos() {
     }
 }
 
-int Table::clearNearbyCells(int src_coord_x, int src_coord_y) {
+void Table::clearNearbyCells(int src_coord_x, int src_coord_y) {
     std::queue<std::pair<int, int>> queue;
     std::set<std::pair<int, int>> visited;
 
     queue.emplace(src_coord_x, src_coord_y);
     visited.emplace(src_coord_x, src_coord_y);
-    int cells_revealed = 1;
 
     while (!queue.empty()) {
         auto [coord_x, coord_y] = queue.front();
@@ -201,8 +203,10 @@ int Table::clearNearbyCells(int src_coord_x, int src_coord_y) {
                     continue;
                 }
 
-                nearby_cell.reveal();
-                ++cells_revealed;
+                if (nearby_cell.getCellState() != CellState::Opened) {
+                    nearby_cell.reveal();
+                    ++m_cells_revealed;
+                }
 
                 if (nearby_cell_value == 0) {
                     queue.emplace(nearby_x, nearby_y);
@@ -211,6 +215,4 @@ int Table::clearNearbyCells(int src_coord_x, int src_coord_y) {
             }
         }
     }
-
-    return cells_revealed;
 }

@@ -34,7 +34,7 @@ private:
 
     void fillTable();
     void initCellsScreenPos();
-    int clearNearbyCells(int coord_x, int coord_y);
+    void clearNearbyCells(int coord_x, int coord_y);
 };
 
 #endif  // TABLE_H
