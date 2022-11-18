@@ -12,6 +12,11 @@ void screenToGameplay() {
     GameplayScreen::startNewGame();
 }
 
+void screenToContinue() {
+    screen_type = ScreenType::Gameplay;
+    GameplayScreen::loadOldGame();
+}
+
 void screenToSettings() { screen_type = ScreenType::Settings; }
 
 ScreenType getScreenType() { return screen_type; }

@@ -38,5 +38,6 @@ build/
 # Notes
 notes.txt
 
-# game config
+# config
 config.yaml
+save.yaml

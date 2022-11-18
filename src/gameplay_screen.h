@@ -17,6 +17,8 @@ public:
     static void interact();
     static void draw();
     static void startNewGame();
+    static void loadOldGame();
+    static void saveOldGame();
 
 private:
     static Table table;

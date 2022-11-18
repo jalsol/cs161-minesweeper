@@ -26,12 +26,12 @@ void SettingsScreen::draw() {
     }
 
     GuiSpinner(Rectangle({400, 310, screen_width - 400 * 2, 80}), "width ",
-               &config.m_table_width, 3, 20, false);
+               &config.table_width, 3, 20, false);
     GuiSpinner(Rectangle({400, 400, screen_width - 400 * 2, 80}), "height ",
-               &config.m_table_height, 3, 10, false);
+               &config.table_height, 3, 10, false);
     GuiSpinner(Rectangle({400, 490, screen_width - 400 * 2, 80}), "bombs ",
-               &config.m_number_of_bomb, 1,
-               config.m_table_width * config.m_table_height, false);
+               &config.number_of_bomb, 1,
+               config.table_width * config.table_height, false);
 }
 
 void SettingsScreen::interact() {}

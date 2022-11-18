@@ -3,6 +3,7 @@
 
 #include <utility>
 #include <vector>
+#include <string>
 
 #include "cell.h"
 
@@ -25,6 +26,8 @@ public:
     std::pair<double, double> getPosFromCoords(int coord_x, int coord_y);
     int revealCell(int coord_x, int coord_y);
     bool coordsInRange(int coord_x, int coord_y);
+    void loadFromSaveData(const std::string& table, const std::string& state);
+    int getNumberOfRevealedCells();
 
     std::vector<std::pair<int, int>> m_bomb_cell_coords;
 

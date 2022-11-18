@@ -1,6 +1,6 @@
 #include "gameplay_screen.h"
 
-#include <iostream>
+#include <fstream>
 
 #include "config.h"
 #include "raygui.h"
@@ -59,7 +59,14 @@ void GameplayScreen::draw() {
                 600, 30, font_size, WHITE);
     // DrawTextSus(TextFormat("BOMBS: %d", 6969), 800, 30, font_size, WHITE);
 
+    bool save_game_selected
+        = GuiButton(Rectangle({1150, 30, 170, 100}), "Save game");
+
     table.drawTable();
+
+    if (save_game_selected) {
+        saveOldGame();
+    }
 
     if (game_state == GameState::Playing) {
         updateFrameCount();
@@ -87,15 +94,14 @@ void GameplayScreen::draw() {
             break;
     }
 
-    float a = 420;
-
-    bool play_selected = GuiButton(Rectangle({a, 570, 130, 100}), "Play");
+    bool new_game_selected
+        = GuiButton(Rectangle({400, 570, 150, 100}), "New game");
     bool settings_selected =
-        GuiButton(Rectangle({a + 150, 570, 230, 100}), "Settings");
+        GuiButton(Rectangle({570, 570, 230, 100}), "Settings");
     bool menu_selected =
-        GuiButton(Rectangle({a + 150 + 230 + 20, 570, 130, 100}), "Menu");
+        GuiButton(Rectangle({820, 570, 130, 100}), "Menu");
 
-    if (play_selected) {
+    if (new_game_selected) {
         global::screenToGameplay();
     } else if (settings_selected) {
         global::screenToSettings();
@@ -107,10 +113,77 @@ void GameplayScreen::draw() {
 void GameplayScreen::startNewGame() {
     const Config& config = Config::getConfigInstance();
 
-    table = Table(config.getTableWidth(), config.getTableHeight());
+    table = Table(config.table_width, config.table_height);
     game_state = GameState::Playing;
     time_elapsed = 0;
     frame_counter = 0;
+}
+
+void GameplayScreen::loadOldGame() {
+    if (!std::ifstream("save.yaml")) {
+        global::screenToMenu();
+        return;
+    }
+
+    YAML::Node save_file = YAML::LoadFile("save.yaml");
+    Config& config = Config::getConfigInstance();
+
+    config.table_width = save_file["TableWidth"].as<int>();
+    config.table_height = save_file["TableHeight"].as<int>();
+    config.number_of_bomb = save_file["NumberOfBombs"].as<int>();
+
+    time_elapsed = save_file["TimeElapsed"].as<int>();
+    frame_counter = save_file["FrameSinceLastSecond"].as<int>();
+    game_state = GameState::Playing;
+
+    std::string saved_table = save_file["Table"].as<std::string>();
+    std::string saved_state = save_file["State"].as<std::string>();
+
+    table = Table(config.table_width, config.table_height);
+    table.loadFromSaveData(saved_table, saved_state);
+}
+
+void GameplayScreen::saveOldGame() {
+    const Config& config = Config::getConfigInstance();
+    YAML::Node node;
+
+    std::string saved_table(table.getWidth() * table.getHeight(), '0');
+    std::string saved_state(table.getWidth() * table.getHeight(), '0');
+
+    for (int coord_y = 0; coord_y < table.getHeight(); ++coord_y) {
+        for (int coord_x = 0; coord_x < table.getWidth(); ++coord_x) {
+            const Cell& cell = table.getCell(coord_x, coord_y);
+            int flattened_index = coord_y * table.getWidth() + coord_x;
+
+            if (cell.getValue() == Cell::bomb_cell_value) {
+                saved_table[flattened_index] = '*';
+            } else {
+                saved_table[flattened_index] = char(cell.getValue() + '0');
+            }
+
+            switch (cell.getCellState()) {
+                case CellState::Opened: {
+                    saved_state[flattened_index] = '1';
+                } break;
+                case CellState::Flagged: {
+                    saved_state[flattened_index] = '!';
+                } break;
+                default: {
+                    saved_state[flattened_index] = '0';
+                } break;
+            }
+        }
+    }
+
+    node["TimeElapsed"] = time_elapsed;
+    node["FrameSinceLastSecond"] = frame_counter;
+    node["NumberOfRevealedCells"] = table.getNumberOfRevealedCells();
+    node["Table"] = saved_table;
+    node["State"] = saved_state;
+
+    std::ofstream save_file("save.yaml");
+    save_file << config.config << '\n' << node;
+    save_file.close();
 }
 
 std::array<int, 3> GameplayScreen::getCurrentTime() {

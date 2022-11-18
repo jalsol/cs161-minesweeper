@@ -11,6 +11,7 @@ namespace global {
 
 void screenToMenu();
 void screenToGameplay();
+void screenToContinue();
 void screenToSettings();
 ScreenType getScreenType();
 

@@ -17,12 +17,17 @@ void MenuScreen::draw() {
     DrawTextSus("Mongusweeper", 100, 100, 100, WHITE);
     DrawTextSus("@jalsol", 100, 190, 30, WHITE);
 
-    bool play_selected = GuiButton(Rectangle({95, 390, 230, 100}), "Play");
+    bool new_game_selected =
+        GuiButton(Rectangle({95, 390, 230, 100}), "New game");
+    bool continue_selected =
+        GuiButton(Rectangle({95, 495, 230, 100}), "Continue");
     bool settings_selected =
-        GuiButton(Rectangle({95, 495, 230, 100}), "Settings");
+        GuiButton(Rectangle({95, 600, 230, 100}), "Settings");
 
-    if (play_selected) {
+    if (new_game_selected) {
         global::screenToGameplay();
+    } else if (continue_selected) {
+        global::screenToContinue();
     } else if (settings_selected) {
         global::screenToSettings();
     }

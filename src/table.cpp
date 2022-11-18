@@ -84,7 +84,7 @@ int Table::revealCell(int coord_x, int coord_y) {
 
     const Config& config = Config::getConfigInstance();
 
-    if (m_cells_revealed == m_width * m_height - config.getNumberOfBombs()) {
+    if (m_cells_revealed == m_width * m_height - config.number_of_bomb) {
         return 1;
     }
 
@@ -110,7 +110,7 @@ void Table::fillTable() {
 
     const Config& config = Config::getConfigInstance();
 
-    for (int i = 0; i < config.getNumberOfBombs(); ++i) {
+    for (int i = 0; i < config.number_of_bomb; ++i) {
         int coord_x = flattened_indices[i] % m_width;
         int coord_y = flattened_indices[i] / m_width;
         m_bomb_cell_coords.emplace_back(coord_x, coord_y);
@@ -215,4 +215,37 @@ void Table::clearNearbyCells(int src_coord_x, int src_coord_y) {
             }
         }
     }
+}
+
+
+void Table::loadFromSaveData(const std::string& table, const std::string& state) {
+    for (int i = 0; i < m_width * m_height; ++i) {
+        int coord_x = i % m_width;
+        int coord_y = i / m_width;
+
+        Cell& cell = getCell(coord_x, coord_y);
+
+        switch (table[i]) {
+            case '*': {
+                cell.setValue(Cell::bomb_cell_value);
+            } break;
+            default: {
+                cell.setValue(int(table[i] - '0'));
+            } break;
+        }
+
+        switch (state[i]) {
+            case '1': {
+                cell.reveal();
+                ++m_cells_revealed;
+            } break;
+            case '!': {
+                cell.toggleFlag();
+            } break;
+        }
+    }
+}
+
+int Table::getNumberOfRevealedCells() {
+    return m_cells_revealed;
 }
