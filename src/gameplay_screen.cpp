@@ -76,7 +76,7 @@ void GameplayScreen::draw() {
 
     table.drawTable();
 
-    if (save_game_selected) {
+    if (save_game_selected && game_state == GameState::Playing) {
         saveOldGame();
     }
 
