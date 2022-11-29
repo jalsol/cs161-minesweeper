@@ -93,6 +93,7 @@ void GameplayScreen::draw() {
 
             DrawRectangle(0, 0, 1366, 768, ColorAlpha(WHITE, 0.5));
             DrawTexture(won_texture, 343, 20, WHITE);
+            DrawTextSus("Victory", 585, 555, 100, ORANGE);
         } break;
         case GameState::Lost: {
             static const Image lost_image = LoadImage("assets/amogus.png");
@@ -101,16 +102,17 @@ void GameplayScreen::draw() {
 
             DrawRectangle(0, 0, 1366, 768, ColorAlpha(WHITE, 0.5));
             DrawTexture(lost_texture, 330, 0, WHITE);
+            DrawTextSus("Defeat", 610, 555, 100, RED);
         } break;
         default:
             break;
     }
 
     bool new_game_selected =
-        GuiButton(Rectangle({400, 570, 150, 100}), "New game");
+        GuiButton(Rectangle({400, 650, 150, 100}), "New game");
     bool settings_selected =
-        GuiButton(Rectangle({570, 570, 230, 100}), "Settings");
-    bool menu_selected = GuiButton(Rectangle({820, 570, 130, 100}), "Menu");
+        GuiButton(Rectangle({570, 650, 230, 100}), "Settings");
+    bool menu_selected = GuiButton(Rectangle({820, 650, 130, 100}), "Menu");
 
     if (new_game_selected) {
         global::screenToGameplay();
