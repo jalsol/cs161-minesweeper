@@ -72,12 +72,13 @@ void GameplayScreen::draw() {
                 WHITE);
 
     bool save_game_selected =
-        GuiButton(Rectangle({1111, 10, 170, 60}), "Save game");
+        GuiButton(Rectangle({1101, 10, 180, 60}), "Menu screen");
 
     table.drawTable();
 
     if (save_game_selected && game_state == GameState::Playing) {
         saveOldGame();
+        global::screenToMenu();
     }
 
     if (game_state == GameState::Playing) {
