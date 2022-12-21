@@ -19,7 +19,7 @@ void SettingsScreen::draw() {
     Config& config = Config::getConfigInstance();
 
     if (GuiButton(Rectangle({400, 200, global::screen_width - 400 * 2, 80}),
-                  "Save and Close")) {
+                  "Save and Return to Menu")) {
         config.writeConfig();
         global::screenToMenu();
     }
