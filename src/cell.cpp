@@ -8,8 +8,6 @@ Cell::Cell()
       m_screen_pos_y(0),
       m_cell_state(CellState::Closed) {}
 
-Cell::~Cell() {}
-
 void Cell::setValue(int value) { m_value = value; }
 
 int Cell::getValue() const { return m_value; }

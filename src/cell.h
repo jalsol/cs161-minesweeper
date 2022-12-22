@@ -16,7 +16,6 @@ public:
     static constexpr int font_size = 30;
 
     Cell();
-    ~Cell();
 
     void setValue(int value);
     int getValue() const;

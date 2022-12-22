@@ -23,8 +23,6 @@ Table::Table(int width, int height)
     initCellsScreenPos();
 }
 
-Table::~Table() {}
-
 Cell& Table::getCell(int x, int y) { return m_board.at(y * m_width + x); }
 
 int Table::getWidth() const { return m_width; }
@@ -249,4 +247,4 @@ void Table::loadFromSaveData(const std::string& table,
     }
 }
 
-int Table::getNumberOfRevealedCells() { return m_cells_revealed; }
+int Table::getNumberOfRevealedCells() const { return m_cells_revealed; }
