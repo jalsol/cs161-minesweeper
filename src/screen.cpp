@@ -9,14 +9,14 @@ void screenToMenu() { screen_type = ScreenType::Menu; }
 
 void screenToGameplay() {
     screen_type = ScreenType::Gameplay;
-    GameplayScreen::loadHighScore();
-    GameplayScreen::startNewGame();
+    gameplayScreen::loadHighScore();
+    gameplayScreen::startNewGame();
 }
 
 void screenToContinue() {
     screen_type = ScreenType::Gameplay;
-    GameplayScreen::loadHighScore();
-    GameplayScreen::loadOldGame();
+    gameplayScreen::loadHighScore();
+    gameplayScreen::loadOldGame();
 }
 
 void screenToSettings() { screen_type = ScreenType::Settings; }

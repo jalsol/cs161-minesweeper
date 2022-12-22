@@ -6,9 +6,9 @@
 #include "screen.h"
 #include "utils.h"
 
-void MenuScreen::interact() {}
+namespace menuScreen {
 
-void MenuScreen::draw() {
+void draw() {
     static const Image background_image = LoadImage("assets/menu_bg.png");
     static const Texture2D background_texture =
         LoadTextureFromImage(background_image);
@@ -32,3 +32,7 @@ void MenuScreen::draw() {
         global::screenToSettings();
     }
 }
+
+void interact() {}
+
+}  // namespace menuScreen

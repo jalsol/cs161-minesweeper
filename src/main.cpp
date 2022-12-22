@@ -45,13 +45,13 @@ int main() {
 
         switch (global::getScreenType()) {
             case ScreenType::Menu: {
-                MenuScreen::interact();
+                menuScreen::interact();
             } break;
             case ScreenType::Gameplay: {
-                GameplayScreen::interact();
+                gameplayScreen::interact();
             } break;
             case ScreenType::Settings: {
-                SettingsScreen::interact();
+                settingsScreen::interact();
             } break;
             default:
                 break;
@@ -61,13 +61,13 @@ int main() {
         {
             switch (global::getScreenType()) {
                 case ScreenType::Menu: {
-                    MenuScreen::draw();
+                    menuScreen::draw();
                 } break;
                 case ScreenType::Gameplay: {
-                    GameplayScreen::draw();
+                    gameplayScreen::draw();
                 } break;
                 case ScreenType::Settings: {
-                    SettingsScreen::draw();
+                    settingsScreen::draw();
                 } break;
                 default:
                     break;

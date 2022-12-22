@@ -8,7 +8,9 @@
 #include "screen.h"
 #include "utils.h"
 
-void SettingsScreen::draw() {
+namespace settingsScreen {
+
+void draw() {
     static const Image background_image = LoadImage("assets/menu_bg.png");
     static const Texture2D background_texture =
         LoadTextureFromImage(background_image);
@@ -33,4 +35,6 @@ void SettingsScreen::draw() {
                config.table_width * config.table_height, false);
 }
 
-void SettingsScreen::interact() {}
+void interact() {}
+
+}  // namespace settingsScreen

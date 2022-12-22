@@ -12,26 +12,29 @@ enum class GameState {
     Lost,
 };
 
-struct GameplayScreen {
-public:
-    static void interact();
-    static void draw();
-    static void startNewGame();
-    static void loadOldGame();
-    static void saveOldGame();
-    static void saveHighScore();
-    static void loadHighScore();
+namespace gameplayScreen {
 
-private:
-    static Table table;
-    static GameState game_state;
-    static int time_elapsed;
-    static int frame_counter;
-    static double score;
-    static double high_score;
+void interact();
+void draw();
+void startNewGame();
+void loadOldGame();
+void saveOldGame();
+void saveHighScore();
+void loadHighScore();
 
-    static void updateFrameCount();
-    static std::array<int, 3> getCurrentTime();
-};
+namespace internal {
+
+extern Table table;
+extern GameState game_state;
+extern int time_elapsed;
+extern int frame_counter;
+extern double score;
+extern double high_score;
+
+void updateFrameCount();
+std::array<int, 3> getCurrentTime();
+
+}  // namespace internal
+}  // namespace gameplayScreen
 
 #endif  // GAMEPLAY_SCREEN_H

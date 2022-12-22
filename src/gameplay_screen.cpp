@@ -9,14 +9,22 @@
 #include "screen.h"
 #include "utils.h"
 
-Table GameplayScreen::table;
-GameState GameplayScreen::game_state;
-int GameplayScreen::time_elapsed;
-int GameplayScreen::frame_counter;
-double GameplayScreen::score;
-double GameplayScreen::high_score;
+namespace gameplayScreen {
 
-void GameplayScreen::interact() {
+namespace internal {
+
+Table table;
+GameState game_state;
+int time_elapsed;
+int frame_counter;
+double score;
+double high_score;
+
+}  // namespace internal
+
+using namespace gameplayScreen::internal;
+
+void interact() {
     if (game_state != GameState::Playing) {
         return;
     }
@@ -38,18 +46,7 @@ void GameplayScreen::interact() {
     }
 }
 
-void GameplayScreen::updateFrameCount() {
-    if (game_state == GameState::Playing) {
-        ++frame_counter;
-    }
-
-    if (frame_counter == global::frames_per_second) {
-        frame_counter = 0;
-        ++time_elapsed;
-    }
-}
-
-void GameplayScreen::draw() {
+void draw() {
     static const Image background_image = LoadImage("assets/background.png");
     static const Texture2D background_texture =
         LoadTextureFromImage(background_image);
@@ -124,7 +121,7 @@ void GameplayScreen::draw() {
     }
 }
 
-void GameplayScreen::startNewGame() {
+void startNewGame() {
     const Config& config = Config::getConfigInstance();
 
     table = Table(config.table_width, config.table_height);
@@ -134,7 +131,7 @@ void GameplayScreen::startNewGame() {
     score = 0;
 }
 
-void GameplayScreen::loadOldGame() {
+void loadOldGame() {
     if (!std::ifstream("save.yaml")) {
         global::screenToMenu();
         return;
@@ -159,7 +156,7 @@ void GameplayScreen::loadOldGame() {
     table.loadFromSaveData(saved_table, saved_state);
 }
 
-void GameplayScreen::saveOldGame() {
+void saveOldGame() {
     const Config& config = Config::getConfigInstance();
     YAML::Node node;
 
@@ -203,7 +200,7 @@ void GameplayScreen::saveOldGame() {
     save_file.close();
 }
 
-void GameplayScreen::saveHighScore() {
+void saveHighScore() {
     if (score > high_score) {
         high_score = score;
 
@@ -213,7 +210,7 @@ void GameplayScreen::saveHighScore() {
     }
 }
 
-void GameplayScreen::loadHighScore() {
+void loadHighScore() {
     std::ifstream saved_high_score("high_score.txt");
 
     if (saved_high_score) {
@@ -227,7 +224,19 @@ void GameplayScreen::loadHighScore() {
     saved_high_score.close();
 }
 
-std::array<int, 3> GameplayScreen::getCurrentTime() {
+namespace internal {
+void updateFrameCount() {
+    if (game_state == GameState::Playing) {
+        ++frame_counter;
+    }
+
+    if (frame_counter == global::frames_per_second) {
+        frame_counter = 0;
+        ++time_elapsed;
+    }
+}
+
+std::array<int, 3> getCurrentTime() {
     // duration is a copy
     int duration = time_elapsed;
 
@@ -241,3 +250,5 @@ std::array<int, 3> GameplayScreen::getCurrentTime() {
 
     return {duration /* hours */, minutes, seconds};
 }
+}  // namespace internal
+}  // namespace gameplayScreen
