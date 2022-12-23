@@ -19,3 +19,30 @@ Author: 22125113 - Nguyen Quang Truong
 - `make -C build`
 - The executable `mongusweeper` will appear.
 
+## Features
+
+- "Creative and enjoyable" meme theme (including looks and sounds!)
+- Customizable board dimensions and number of bombs
+- Saved previous game
+- Saved high score
+- ...And more waiting for you to discover
+(if my lecturers and teaching assistants are reading this, I swear I have
+fulfilled every important requirement)!
+
+## License
+
+This project is licensed under Apache License 2.0. Dependencies are licensed
+under their respective licenses.
+
+Due to the usage of the "Among Us IP", this project also follows the
+[Fan Creation Policy](https://www.innersloth.com/fan-creation-policy/) by
+Innersloth LLC. This policy is preferred over the project's license and the
+dependencies' licenses, in case any conflict occurs.
+
+## Video demonstration
+
+[https://www.youtube.com/watch?v=W1Rf-jkQfd0](https://www.youtube.com/watch?v=W1Rf-jkQfd0)
+
+## Documents
+
+Read `22125113.docx`.
