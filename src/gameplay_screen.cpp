@@ -214,7 +214,6 @@ void loadHighScore() {
     std::ifstream saved_high_score("high_score.txt");
 
     if (saved_high_score) {
-        double high_score;
         saved_high_score >> high_score;
         saved_high_score.close();
     } else {
