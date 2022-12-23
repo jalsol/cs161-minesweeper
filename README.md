@@ -43,6 +43,7 @@ dependencies' licenses, in case any conflict occurs.
 
 [https://www.youtube.com/watch?v=W1Rf-jkQfd0](https://www.youtube.com/watch?v=W1Rf-jkQfd0)
 
-## Documents
+## Documentation
 
-Read `22125113.docx`.
+Read [here](https://docs.google.com/document/d/1gEMF1-3z2fsRiz-PQY86WD-v5fOxremItgopuMwzqQs/edit#)
+or `22125113.docx`.
