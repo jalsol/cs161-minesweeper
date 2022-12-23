@@ -5,8 +5,11 @@ namespace menuScreen {
 constexpr int play_corner_x = 95;
 constexpr int play_corner_y = 390;
 
+constexpr int continue_corner_x = 95;
+constexpr int continue_corner_y = 495;
+
 constexpr int settings_corner_x = 95;
-constexpr int settings_corner_y = 495;
+constexpr int settings_corner_y = 600;
 
 constexpr int button_width = 230;
 constexpr int button_height = 100;
