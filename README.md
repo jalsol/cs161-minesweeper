@@ -19,6 +19,10 @@ Author: 22125113 - Nguyen Quang Truong
 - `make -C build`
 - The executable `mongusweeper` will appear.
 
+## Prebuilt executables
+
+Executables inside `release` should be moved to the root of the repo before running.
+
 ## Features
 
 - "Creative and enjoyable" meme theme (including looks and sounds!)
